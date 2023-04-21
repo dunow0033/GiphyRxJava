@@ -1,6 +1,5 @@
 package com.example.giphyapiandroom.repository
 
-import android.provider.Contacts.SettingsColumns.KEY
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +8,7 @@ import com.example.giphyapiandroom.data.database.toDataEntityList
 import com.example.giphyapiandroom.data.database.toDataList
 import com.example.giphyapiandroom.data.network.GiphyApi
 import com.example.giphyapiandroom.di.DaggerAppComponent
-//import com.example.giphyapiandroom.internal.KEY
+import com.example.giphyapiandroom.internal.KEY
 import com.example.giphyapiandroom.internal.LIMIT
 import com.example.giphyapiandroom.internal.RATING
 import com.example.giphyapiandroom.model.Data
