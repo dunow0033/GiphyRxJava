@@ -1,11 +1,12 @@
 package com.example.giphyapiandroom.repository
 
+import android.provider.Contacts.SettingsColumns.KEY
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-//import com.example.giphyapiandroom.GiphyApplication
-//import com.example.giphyapiandroom.data.database.toDataEntityList
-//import com.example.giphyapiandroom.data.database.toDataList
+import com.example.giphyapiandroom.GiphyApplication
+import com.example.giphyapiandroom.data.database.toDataEntityList
+import com.example.giphyapiandroom.data.database.toDataList
 import com.example.giphyapiandroom.data.network.GiphyApi
 import com.example.giphyapiandroom.di.DaggerAppComponent
 //import com.example.giphyapiandroom.internal.KEY
@@ -42,63 +43,63 @@ class TrendingRepository {
         DaggerAppComponent.create().inject(this)
     }
 
-//    private fun insertData(): Disposable {
-//        return giphyApiService.getTrending(KEY, LIMIT, RATING)
-//            .subscribeOn(Schedulers.io())
-//            .subscribeWith(subscribeToDatabase())
-//    }
-//
-//    private fun subscribeToDatabase(): DisposableSubscriber<TrendingResult> {
-//        return object : DisposableSubscriber<TrendingResult>() {
-//
-//            override fun onNext(trendingResult: TrendingResult?) {
-//                if (trendingResult != null) {
-//                    val entityList = trendingResult.data.toList().toDataEntityList()
-//                    GiphyApplication.database.apply {
-//                        dataDao().insertData(entityList)
-//                    }
-//                }
-//            }
-//
-//            override fun onError(t: Throwable?) {
-//                _isInProgress.postValue(true)
-//                Log.e("insertData()", "TrendingResult error: ${t?.message}")
-//                _isError.postValue(true)
-//                _isInProgress.postValue(false)
-//            }
-//
-//            override fun onComplete() {
-//                Log.v("insertData()", "insert success")
-//                getTrendingQuery()
-//            }
-//        }
-//    }
-//
-//    private fun getTrendingQuery(): Disposable {
-//        return GiphyApplication.database.dataDao()
-//            .queryData()
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe(
-//                { dataEntityList ->
-//                    _isInProgress.postValue(true)
-//                    if (dataEntityList != null && dataEntityList.isNotEmpty()) {
-//                        _isError.postValue(false)
-//                        _data.postValue(dataEntityList.toDataList())
-//                    } else {
-//                        insertData()
-//                    }
-//                    _isInProgress.postValue(false)
-//
-//                },
-//                {
-//                    _isInProgress.postValue(true)
-//                    Log.e("getTrendingQuery()", "Database error: ${it.message}")
-//                    _isError.postValue(true)
-//                    _isInProgress.postValue(false)
-//                }
-//            )
-//    }
-//
-//    fun fetchDataFromDatabase(): Disposable = getTrendingQuery()
+    private fun insertData(): Disposable {
+        return giphyApiService.getTrending(KEY, LIMIT, RATING)
+            .subscribeOn(Schedulers.io())
+            .subscribeWith(subscribeToDatabase())
+    }
+
+    private fun subscribeToDatabase(): DisposableSubscriber<TrendingResult> {
+        return object : DisposableSubscriber<TrendingResult>() {
+
+            override fun onNext(trendingResult: TrendingResult?) {
+                if (trendingResult != null) {
+                    val entityList = trendingResult.data.toList().toDataEntityList()
+                    GiphyApplication.database.apply {
+                        dataDao().insertData(entityList)
+                    }
+                }
+            }
+
+            override fun onError(t: Throwable?) {
+                _isInProgress.postValue(true)
+                Log.e("insertData()", "TrendingResult error: ${t?.message}")
+                _isError.postValue(true)
+                _isInProgress.postValue(false)
+            }
+
+            override fun onComplete() {
+                Log.v("insertData()", "insert success")
+                getTrendingQuery()
+            }
+        }
+    }
+
+    private fun getTrendingQuery(): Disposable {
+        return GiphyApplication.database.dataDao()
+            .queryData()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { dataEntityList ->
+                    _isInProgress.postValue(true)
+                    if (dataEntityList != null && dataEntityList.isNotEmpty()) {
+                        _isError.postValue(false)
+                        _data.postValue(dataEntityList.toDataList())
+                    } else {
+                        insertData()
+                    }
+                    _isInProgress.postValue(false)
+
+                },
+                {
+                    _isInProgress.postValue(true)
+                    Log.e("getTrendingQuery()", "Database error: ${it.message}")
+                    _isError.postValue(true)
+                    _isInProgress.postValue(false)
+                }
+            )
+    }
+
+    fun fetchDataFromDatabase(): Disposable = getTrendingQuery()
 }

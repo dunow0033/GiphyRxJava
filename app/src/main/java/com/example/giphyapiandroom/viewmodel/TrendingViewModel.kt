@@ -15,7 +15,7 @@ class TrendingViewModel : ViewModel() {
 
     init {
         DaggerAppComponent.create().inject(this)
-        //compositeDisposable.add(repository.fetchDataFromDatabase())
+        compositeDisposable.add(repository.fetchDataFromDatabase())
     }
 
     override fun onCleared() {
